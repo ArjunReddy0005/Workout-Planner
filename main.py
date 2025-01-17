@@ -95,6 +95,15 @@ def begin_file():
     except FileNotFoundError:
         with open(WORKOUT_FILE, 'w') as workoutFile:
             json.dump({'current_workout': [], 'past_workouts': []}, workoutFile, indent=5)
+<<<<<<< HEAD
+=======
+
+
+if __name__ == "__main__":
+    main()
+
+
+>>>>>>> faa7f255025cb55fbb14f566360cc84e2e8e1d83
 
 
 if __name__ == "__main__":
