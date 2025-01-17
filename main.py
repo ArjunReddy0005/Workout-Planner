@@ -95,7 +95,40 @@ def begin_file():
     except FileNotFoundError:
         with open(WORKOUT_FILE, 'w') as workoutFile:
             json.dump({'current_workout': [], 'past_workouts': []}, workoutFile, indent=5)
+            
+def log_workout(muscleGroup, workoutName, sets, reps, weights_kg):
+    """
+    Logs a workout entry into the database.
 
+    Parameters:
+        name (str): Name of the workout.
+        muscle_group (str): Targeted muscle group.
+        sets (int): Number of sets performed.
+        reps (int): Number of repetitions per set.
+        weight (float): Weight used during the workout (in kg).
+
+    Complexity:
+        Best Case Complexity: O(1)
+        Worst Case Complexity: O(1)
+    """
+    entry = {
+        'date': datetime.now().strftime("%d-/%m/%Y, %H:%M:%S"),
+        'workout_name': workoutName,
+        'muscle_group': muscleGroup,
+        'Sets': sets,
+        'Reps': reps,
+        'Weights': weights_kg
+    }
+
+    with open(WORKOUT_FILE, 'r+') as workoutFile:
+        workout_data = json.load(workoutFile)
+        workout_data['past_workouts'].update(entry)
+        workout_data['current_workout'].update(entry)
+
+        workoutFile.seek()
+        json.dump(workout_data,workoutFile,indent=5)
+
+    print(f"{workoutName} targets the {muscleGroup}, completing {reps} reps for {sets} sets at a load of {weights_kg}.")
 if __name__ == "__main__":
     main()
 
