@@ -129,6 +129,59 @@ def log_workout(muscleGroup, workoutName, sets, reps, weights_kg):
         json.dump(workout_data,workoutFile,indent=5)
 
     print(f"{workoutName} targets the {muscleGroup}, completing {reps} reps for {sets} sets at a load of {weights_kg}.")
+
+def generate_workout():
+    """
+    generates a workout by analyzing the least targeted muscle group in the workout history.
+
+    Parameters: None
+    Return: None
+
+    Complexity:
+        Best Case Complexity: O(1)
+        Worst Case Complexity: O(1)
+    """
+    with open(WORKOUT_FILE, 'r') as workoutFile:
+            workoutFile = json.load(workoutFile)
+
+    muscle_count = {}
+    for workout in workoutFile['past_workouts']:
+        muscle_count[workout['muscle_group']] = muscle_count.get(workout['muscle_group'], 0) + 1
+
+    least_count_muscle = min(muscle_count, key=muscle_count.get)
+    
+    generate_workout = ''
+    for workout in default_workouts:
+        if workout['muscle_group'] == least_count_muscle:
+            generated_workout = workout
+    
+    print(f'Suggested workout is {generated_workout['workout_name']} for the {generated_workout['muscle_group']}')
+
+def calculate_gains():
+    """
+    Calculates the total weight lifted and estimates muscle gain based on workout history.
+
+    Parameters: None
+    Return: None
+
+    Complexity:
+        Best Case Complexity: O(1)
+        Worst Case Complexity: O(1)
+    """
+    with open(WORKOUT_FILE, 'r') as workoutFile:
+            workoutFile = json.load(workoutFile)
+
+    tot_weigths = 0
+    tot_muscle_gain = 0
+    muscle_gain_factor = 0.001
+    for entry in workoutFile['past_workouts']:
+        tot_weigths += (entry['Sets'] *entry['Reps'] * entry['Weights'])
+        tot_muscle_gain += (entry['Sets'] *entry['Reps'] * entry['Weights']) * muscle_gain_factor
+    
+    print(f'Total weigth lifted is {tot_weigths}kg\nTotal muscle gain is {tot_muscle_gain}kg')
+
+
+
 if __name__ == "__main__":
     main()
 
