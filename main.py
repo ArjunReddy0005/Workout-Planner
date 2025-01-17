@@ -72,6 +72,32 @@ def main():
         else:
             print('Invalid option. Please choose options 1 - 4.')
 
+def begin_file(): 
+    
+    """
+    Ensures that the workout database file exists and is initialized.
+    If the file is missing, it creates a new database with default structure.
 
+    Args:
+        None
+
+    Returns:
+        None
+
+    Complexity:
+        Best Case Complexity: O(1)
+        Worst Case Complexity: O(1)
+    """
+
+    try:
+        with open(WORKOUT_FILE, 'r') as workoutFile:
+            workoutFile = json.load(workoutFile)
+    except FileNotFoundError:
+        with open(WORKOUT_FILE, 'w') as workoutFile:
+            json.dump({'current_workout': [], 'past_workouts': []}, workoutFile, indent=5)
+
+
+if __name__ == "__main__":
+    main()
 
 
