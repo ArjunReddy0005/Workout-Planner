@@ -5,11 +5,12 @@ An organised plan determines which muscles are working out and if my efforts
 are alligned with my fitness goals and muscle gain.
 """
 __author__ = "Sai Arjun Reddy"
-__docformat__ = 'reStructuredText'
+__docformat__ = '.py Python'
 
 import json
 from datetime import datetime
 
+# File to store workout data
 WORKOUT_FILE = 'workout.json'
 default_workouts = [
     {"workout_name": "Bench Press", "muscle_group": "Chest"},
@@ -33,12 +34,12 @@ def main():
         None
 
     Complexity:
-        Best Case Complexity: O(1)
-        Worst Case Complexity: O(n)
+        Best Case Complexity: O(1), pick the exit option (4) to exit program and while loop.
+        Worst Case Complexity: O(n), call a function or pick invalid option requiring multiple iterations within while loop.
     """
 
     begin_file()
-
+    # Ensure file exists and is readable
     while True:
         
         print('Workout Out Planner\n')
@@ -87,6 +88,7 @@ def begin_file():
     Complexity:
         Best Case Complexity: O(1)
         Worst Case Complexity: O(1)
+        Best and worst case complexities are the same since the function will retun None after 1 iterations present
     """
 
     try:
@@ -110,6 +112,7 @@ def log_workout(muscleGroup, workoutName, sets, reps, weights_kg):
     Complexity:
         Best Case Complexity: O(1)
         Worst Case Complexity: O(1)
+        Best and worst case complexities are the same since the function will retun None after 1 iterations present
     """
     entry = {
         'date': datetime.now().strftime("%d-/%m/%Y, %H:%M:%S"),
@@ -140,14 +143,17 @@ def generate_workout():
     Complexity:
         Best Case Complexity: O(1)
         Worst Case Complexity: O(1)
+        Best and worst case complexities are the same since the function will retun None after 1 iterations present.
     """
     with open(WORKOUT_FILE, 'r') as workoutFile:
             workoutFile = json.load(workoutFile)
-
+        
+    # Count occurrences of each muscle group in history
     muscle_count = {}
     for workout in workoutFile['past_workouts']:
         muscle_count[workout['muscle_group']] = muscle_count.get(workout['muscle_group'], 0) + 1
-
+    
+    # Find the least worked muscle group
     least_count_muscle = min(muscle_count, key=muscle_count.get)
     
     generate_workout = ''
@@ -167,15 +173,23 @@ def calculate_gains():
     Complexity:
         Best Case Complexity: O(1)
         Worst Case Complexity: O(1)
+        Best and worst case complexities are the same since the function will retun None after 1 iterations present
+
     """
     with open(WORKOUT_FILE, 'r') as workoutFile:
             workoutFile = json.load(workoutFile)
 
     tot_weigths = 0
     tot_muscle_gain = 0
+    
+    # Simplistic formula for muscle gain estimation
     muscle_gain_factor = 0.001
+
+    # Iterate through past workouts in the history section of the json file and calculate total weights and muscle gain
     for entry in workoutFile['past_workouts']:
+        # total weigths lifted += sets in each workout * reps * weigths
         tot_weigths += (entry['Sets'] *entry['Reps'] * entry['Weights'])
+        # total muscle gain +=  sets in each workout * reps * weights * 0.001
         tot_muscle_gain += (entry['Sets'] *entry['Reps'] * entry['Weights']) * muscle_gain_factor
     
     print(f'Total weigth lifted is {tot_weigths}kg\nTotal muscle gain is {tot_muscle_gain}kg')
